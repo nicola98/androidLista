@@ -1,7 +1,14 @@
 package accademia.lynxspa.com.accademiaapp.logic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
+import android.view.View;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import accademia.lynxspa.com.accademiaapp.R;
@@ -10,7 +17,8 @@ import accademia.lynxspa.com.accademiaapp.data.MainSingleton;
 
 public class DataAccessUtils {
 
-
+    public final static String PREFS_FILENAME = "favoriteFile";
+    public final static String PREFS_FAVORITE_KEY = "favoriteKey";
 
     public static List<Contatto> getDataSourceItemList(Context context) {
 
@@ -49,8 +57,29 @@ public class DataAccessUtils {
     }
 
     public static void initDataSource(Context context) {
-        Contatto firstContact = new Contatto("Canna", "0000");
-        addItemToDataSource(context, firstContact);
+        if(getDataSourceItemList(context) == null || getDataSourceItemList(context).size() == 0){
+            addItemToDataSource(context, new Contatto("Simone Cimoli", "+39 1234567"));
+            addItemToDataSource(context, new Contatto("Mario Rossi", "+39 1111111"));
+            addItemToDataSource(context, new Contatto("Matteo Bianchi", "+39 2222222"));
+            addItemToDataSource(context, new Contatto("Rosa Tulipano", "+39 3333333"));
+        }
+    }
+
+    /* SharedPrefereces methods */
+
+    public static void setFavoriteValueInPreferences(Context context, String favoriteValue)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREFS_FAVORITE_KEY, favoriteValue);
+        editor.commit();
+    }
+
+    public static String getFavoriteValueInPreferences(Context context)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE);
+        String favoriteValue = sharedPreferences.getString(PREFS_FAVORITE_KEY, null);
+        return favoriteValue;
     }
 
 }

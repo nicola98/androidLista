@@ -16,16 +16,33 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_below="@+id/detailTextView"
+        android:layout_centerInParent="true"
         android:id="@+id/detailImageView" />
 
-    <Button
-        android:text="@string/back"
-        android:gravity="center"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/detailTextView"
-        android:layout_toRightOf="@+id/detailImageView"
-        android:id="@+id/detailButton" />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/detailImageView">
+
+
+        <Button
+            android:id="@+id/backButton"
+            android:text="@string/back"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/setFavoriteButton"
+            android:text="Set Favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
 
 
 </RelativeLayout>

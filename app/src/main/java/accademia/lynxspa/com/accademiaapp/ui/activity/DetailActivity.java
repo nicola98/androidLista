@@ -1,6 +1,7 @@
 package accademia.lynxspa.com.accademiaapp.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -30,20 +31,34 @@ public class DetailActivity extends Activity {
 
         // Set TextView
         TextView resultTextView = (TextView) findViewById(R.id.detailTextView);
-        resultTextView.setText(DataAccessUtils.getItemAtIndex(this, selectedItem).getNome());
+        resultTextView.setText(DataAccessUtils.getItemAtIndex(this, currentItemValue).getNome());
 
         // Set ImageView
         ImageView imageView = (ImageView) findViewById(R.id.detailImageView);
-        imageView.setBackgroundColor(DataAccessUtils.getColorForPosition(this, selectedItem));
+        imageView.setBackgroundColor(DataAccessUtils.getColorForPosition(this, currentItemValue));
 
         // Set onclick listener
-        Button detailButton = (Button) findViewById(R.id.detailButton);
-        detailButton.setOnClickListener(new View.OnClickListener() {
+        Button backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+        // Set onclick listener
+        Button favButton = (Button) findViewById(R.id.setFavoriteButton);
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFavorite(getApplicationContext());
+            }
+        });
+    }
+
+    private void setFavorite(Context context)
+    {
+        DataAccessUtils.setFavoriteValueInPreferences(context, DataAccessUtils.getItemAtIndex(this, currentItemValue).getTelefono());
     }
 
     @Override

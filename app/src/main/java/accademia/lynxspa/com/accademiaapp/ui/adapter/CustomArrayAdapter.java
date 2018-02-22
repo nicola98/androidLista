@@ -25,7 +25,6 @@ public class CustomArrayAdapter extends ArrayAdapter<Contatto> {
 
     public CustomArrayAdapter(Context context) {
         super(context, R.layout.list_item_layout, MainSingleton.getInstance().getItemList());
-
         contattoList = MainSingleton.getInstance().getItemList();
         this.context = context;
     }
@@ -33,31 +32,45 @@ public class CustomArrayAdapter extends ArrayAdapter<Contatto> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.list_item_layout, parent, false);
+        ViewHolder viewHolder = null;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext() .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_item_layout, null);
+            viewHolder = new ViewHolder();
+            viewHolder.nameTextView = (TextView)convertView.findViewById(R.id.name);
+            viewHolder.numberTextView = (TextView)convertView.findViewById(R.id.number); convertView.setTag(viewHolder);
+            viewHolder.logoImageView = (ImageView)convertView.findViewById(R.id.logo);
+            viewHolder.starImageView = (ImageView)convertView.findViewById(R.id.starImage);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
-        TextView nameTextView = (TextView) rowView.findViewById(R.id.name);
         String name = this.contattoList.get(position).getNome();
-        nameTextView.setText(name);
+        viewHolder.nameTextView.setText(name);
 
-        TextView numberTextView = (TextView) rowView.findViewById(R.id.number);
         String number = this.contattoList.get(position).getTelefono();
-        numberTextView.setText(number);
+        viewHolder.numberTextView.setText(number);
 
         // Set icon
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
-        imageView.setBackgroundColor(DataAccessUtils.getColorForPosition(context, position));
+        viewHolder.logoImageView.setBackgroundColor(DataAccessUtils.getColorForPosition(context, position));
 
-        return rowView;
+        // Set correct star image visibility
+        String favoriteValue = DataAccessUtils.getFavoriteValueInPreferences(getContext());
+
+        if (favoriteValue != null && favoriteValue.equals(number)) {
+            viewHolder.starImageView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.starImageView.setVisibility(View.GONE);
+        }
+
+        return convertView;
 
     }
 
     public void setValues(List<Contatto> contatti) {
-
         Log.d("DATA SET", "Contacts list count changed in " + contatti.size());
-
         this.contattoList = contatti;
-
         notifyDataSetChanged();
     }
 
@@ -65,4 +78,12 @@ public class CustomArrayAdapter extends ArrayAdapter<Contatto> {
     public int getCount() {
         return contattoList.size();
     }
+
+    private class ViewHolder {
+        public TextView nameTextView;
+        public TextView numberTextView;
+        public ImageView logoImageView;
+        public ImageView starImageView;
+    }
+
 }

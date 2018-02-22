@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_add: {
                 Intent intent = new Intent(getApplicationContext(), AddContattoActivity.class);
                 startActivity(intent);
+
+
                 return true;
             }
             default: {
